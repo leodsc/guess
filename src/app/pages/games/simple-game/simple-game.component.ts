@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {Word} from '../classes/word';
 
 @Component({
   selector: 'app-simple-game',
@@ -11,23 +12,18 @@ export class SimpleGameComponent implements OnInit {
   // bugs: cor vermelha mudando quando a tentativa é aumentada
   // bug: é possível fazer nova tentativa sem preencher todos os blocos
 
-  // [class.turn-around]="block.rightLetter[i] && t == this.block.current.y" 
-  tentatives = Array(6).fill(0);
-  letters = Array(5).fill(null);
-  currentWord: string[] = [];
+  readonly tentatives = Array(6).fill(0).map(() => {
+    return new Word(5);
+  })
   currentTentative = 0;
+
   wordTarget = "TENSO";
   wordStack: string[] = [];
-  word = {
-    target: "TENSO",
-    current: []
-  }
   block = {
     current: {
       x: 0,
       y: 0,
     },
-    rightLetter: Array(5).fill(false),
   }
 
   constructor() { }
@@ -36,8 +32,9 @@ export class SimpleGameComponent implements OnInit {
   }
 
   showKey(key: string) {
+    const word = this.tentatives[this.currentTentative];
     // trim to prevent mouse/touch click add a space in the letter
-    this.currentWord[this.block.current.x] = key.trim();
+    word.add(this.block.current.x, key.trim());
     if (this.block.current.x < 4) {
       this.block.current.x += 1;
     }
@@ -54,18 +51,13 @@ export class SimpleGameComponent implements OnInit {
   }
 
   private isRightWord() {
-    for (const [index, letter] of this.currentWord.entries()) {
-      if (letter === this.wordTarget[index]) {
-        this.block.rightLetter[index] = true;
-      }
-    }
-    const rightAnswer = this.currentWord.join("") === this.wordTarget;
+    const word = this.tentatives[this.currentTentative];
+    word.compare();
+    const rightAnswer = word.value.join("") === this.wordTarget;
     if (rightAnswer) {
       return;
     } else {
-      console.log(this.wordStack);
-      this.wordStack.push(this.currentWord.join(""));
-      this.currentWord = [];
+      this.wordStack.push(word.value.join(""));
       this.block.current.x = 0;
       this.block.current.y += 1;
       this.currentTentative += 1;

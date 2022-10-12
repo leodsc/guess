@@ -1,12 +1,13 @@
 <main class="page">
 	<div class="board">
-		<div class="tentative" *ngFor="let tentative of tentatives; let t = index">
+		<div class="tentative" *ngFor="let word of tentatives; let t = index">
 			<div 
 		 		class="letter-ctn" 
-		 		*ngFor="let letter of letters; let i = index" 
+		 		 [ngClass]="'turn-around__' + word.rightLetters[i] | lowercase"
+		 		*ngFor="let letter of word.value; let i = index" 
 				(click)="changeCurrentLetterBox(i)">
 				<p *ngIf="currentTentative == t" class="letter">
-					{{currentWord[i]}}
+					{{word.value[i]}}
 				</p>
 				<p class="letter" *ngIf="currentTentative !== t && wordStack[t] !== undefined">
 					{{ wordStack[t] | pop:i}}

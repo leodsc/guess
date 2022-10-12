@@ -1,0 +1,103 @@
+@import "variables";
+@import "functions";
+
+header {
+	display: flex;
+	padding: 1.5rem;
+	box-shadow: 0px 0px 5px 1px;
+	align-items: center;
+	justify-content: space-between;
+
+	background-color: var(--banner-bg);
+
+	h2 {
+		color: var(--text-color);
+	}
+}
+
+.hamburguer-menu {
+	display: flex;
+	position: relative;
+	z-index: map-get($z-indexes, "hamburguer-btn");
+	flex-direction: column;
+	gap: 0.25rem;
+	width: 60px;
+	cursor: pointer;
+
+	&__line {
+		background: var(--btn-bg-color);
+		border-radius: 5px;
+		width: 100%;
+		height: 5px;
+	}
+
+	&--menu-open {
+		@extend .hamburguer-menu;
+		$child-movement: (1: rotate(45deg), 2: 0, 3: rotate(-45deg));
+
+		@for $i from 1 through 3 {
+			:nth-child(#{$i}) {
+				background-color: #d9534f;
+				position: absolute;
+				transition: all 500ms;
+				@if ($i == 2) {
+					display: none;
+				} @else {
+					transform: map-get($child-movement, $i);
+				}
+			}
+		}
+	}
+}
+
+.ng-fa-icon {
+	color: var(--text-color);
+}
+
+nav {
+	left: -100%;
+	padding-top: 3rem;
+	position: absolute;
+	animation-name: move-nav;
+	animation-duration: 500ms;
+	animation-iteration-count: 1;
+	background: var(--banner-bg);
+	box-shadow: 0px 0px 10px 0px #333;
+	z-index: map-get($z-indexes, nav);
+	top: 0;
+
+	&.show { 
+		left: 0%;
+	}
+
+	.pages {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		padding: 1.5rem;
+		width: 50vw;
+		max-width: 200px;
+		min-width: 170px;
+
+		&--link {
+			font-size: font("sizes", "medium");
+			display: flex;
+			justify-content: space-between;
+			gap: 1rem;
+			align-items: center;
+
+			li {
+				color: var(--text-color);
+			}
+		}
+	}
+}
+
+@keyframes move-nav {
+	0% {
+		left: -100%;
+	}
+	100% {
+		left: 0%;
+	}
+}

@@ -1,1 +1,27 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+@import "functions";
+
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	list-style-type: none;
+	text-decoration: none;
+	font-family: font("families", "Open sans"), sans-serif;
+	background-color: transparent;
+	border: none;
+}
+
+body.light-theme {
+	--text-color: #222;
+	--btn-bg-color: #222;
+	--banner-bg: #fff;
+	background-color: #eee;
+}
+
+body.dark-theme {
+	--text-color: #fff;
+	--btn-bg-color: #eee;
+	--banner-bg: #444;
+	background-color: #333;
+}

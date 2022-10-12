@@ -1,0 +1,24 @@
+<header>
+	<div (click)="toggleNav()" [ngClass]="showNav ? 'hamburguer-menu--menu-open' : 'hamburguer-menu'">
+		<div class="hamburguer-menu__line"></div>
+		<div class="hamburguer-menu__line"></div>
+		<div class="hamburguer-menu__line"></div>
+	</div>
+	<nav *ngIf="showNav" [ngClass]="showNav ? 'show' : null">
+		<ul class="pages">
+			<a *ngFor="let link of links" class="pages--link" routerLink="{{link.link}}">
+				<fa-icon [icon]="link.icon"></fa-icon>
+				<li>{{link.name}}</li>
+			</a>
+		</ul>
+	</nav>
+	<h2 class="app-title">Term</h2>
+	<button class="icon-ctn" (click)="changeIcon()">
+		<fa-icon 
+			size="2xl" 
+			[icon]="themeIcon" 
+			[fixedWidth]="true"
+		>
+		</fa-icon>
+	</button>
+</header>

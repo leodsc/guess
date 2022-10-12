@@ -1,0 +1,61 @@
+@import "functions";
+
+.page {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+}
+
+.tentative {
+	display: flex;
+	flex-direction: row;
+	gap: 0.5rem;
+}
+
+.letter-ctn {
+	opacity: 0.75;
+	margin-top: 1rem;
+	width: 60px;
+	height: 60px;
+	border: 2px solid var(--btn-bg-color);
+	border-radius: 5px;
+	text-align: center;
+	text-justify: center;
+	position: relative;
+}
+
+.letter {
+	font-size: font("sizes", "medium");
+	color: var(--text-color);
+}
+
+.current-block {
+	background-color: var(--btn-bg-color);
+	width: 100%;
+	height: 5px;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	bottom: 0;
+	position: absolute;
+}
+
+.turn-around {
+	animation-name: turn-around;
+	animation-duration: 1s;
+	animation-iteration-count: 1;
+	background: red;
+}
+
+@keyframes turn-around {
+	25% {
+		transform: translateZ(25%);
+	}
+	75% {
+		transform: translateZ(75%);
+	}
+	100% {
+		transform: translateZ(100%);
+	}
+}

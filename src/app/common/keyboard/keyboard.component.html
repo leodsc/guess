@@ -1,0 +1,10 @@
+<section class="keyboard">
+	<div class="keyboard__line" *ngFor="let lines of keys">
+		<button 
+			(click)="write($event)"
+			class="line__key" 
+			*ngFor="let key of lines">
+				{{key | uppercase}}
+		</button>
+	</div>
+</section>

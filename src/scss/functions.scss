@@ -1,0 +1,6 @@
+@import "variables";
+
+@function font($prop, $value) {
+	$map: map-get($fonts, $prop);
+	@return map-get($map, $value);
+}

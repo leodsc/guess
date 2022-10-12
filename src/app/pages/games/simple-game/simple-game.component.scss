@@ -15,14 +15,15 @@
 }
 
 .letter-ctn {
+	$ctn-height: 60px;
 	opacity: 0.75;
 	margin-top: 1rem;
 	width: 60px;
-	height: 60px;
+	height: $ctn-height;
 	border: 2px solid var(--btn-bg-color);
 	border-radius: 5px;
 	text-align: center;
-	text-justify: center;
+	line-height: $ctn-height;
 	position: relative;
 }
 
@@ -33,11 +34,12 @@
 
 .current-block {
 	background-color: var(--btn-bg-color);
-	width: 100%;
+	width: 105%;
 	height: 5px;
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
 	bottom: 0;
+	left: -2px;
 	position: absolute;
 }
 
@@ -52,15 +54,16 @@ $animation-time: 500;
 @mixin animation-block($status) {
 	$blocks-colors: (
 		"right": #5cb85c, 
-		"semi": #d9534f, 
-		"wrong": #f0ad4e
+		"wrong": #d9534f, 
+		"semi": #f0ad4e,
 	);
+
 	@keyframes turn-block-#{$status} {
 		50% {
 			transform: scale(1.5);
 		}
 		100% {
-			transform: rotateY(180deg) scale(1);
+			transform: scale(1);
 			background-color: map-get($blocks-colors, $status);
 		}
 	}

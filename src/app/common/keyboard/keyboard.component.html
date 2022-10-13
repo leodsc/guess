@@ -2,7 +2,8 @@
 	<div class="keyboard__line" *ngFor="let lines of keys">
 		<button 
 			(click)="write($event)"
-			class="line__key" 
+			class="line__key"
+	 		[ngClass]="deactivated.includes(key | uppercase) ? 'inactive' : ''"
 			*ngFor="let key of lines">
 				{{key | uppercase}}
 		</button>

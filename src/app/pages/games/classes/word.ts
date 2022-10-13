@@ -29,7 +29,7 @@ export class Word {
       } else if (count && numberOfTimes === undefined) {
         return {...acc, [current]: 1};
       }
-      return {...acc, [current]: 0}
+      return {...acc, [current]: { count: 0, status: [] }}
     }, {})
   }
 
@@ -40,15 +40,22 @@ export class Word {
 
     for (const [index, letter] of this._value.entries()) {
       //@ts-ignore
-      this.wordTokens[letter] += 1;
+      this.wordTokens[letter].count += 1;
       if (letter === targetArr[index]) {
         this.rightLetters[index] = "RIGHT";
+        //@ts-ignore
+        this.wordTokens[letter].status.push("RIGHT");
       } else if (this.isLetterOutOfOrder(letter)) {
         this.rightLetters[index] = "SEMI";
+        //@ts-ignore
+        this.wordTokens[letter].status.push("SEMI");
       } else {
+        //@ts-ignore
+        this.wordTokens[letter].status.push("WRONG");
         this.rightLetters[index] = "WRONG";
       }
     }
+    console.log(this.wordTokens);
   }
 
   isBlockEmpty(index: number) {
@@ -67,7 +74,7 @@ export class Word {
     //@ts-ignore
     const letterDontExistOnTarget = this.targetTokens[letter] === undefined;
     //@ts-ignore
-    const letterIsOutOfOrder = this.wordTokens[letter] <= this.targetTokens[letter];
+    const letterIsOutOfOrder = this.wordTokens[letter].count <= this.targetTokens[letter];
     if (letterDontExistOnTarget) {
       return false;
     } else if (letterIsOutOfOrder) {

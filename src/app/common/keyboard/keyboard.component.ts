@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-keyboard',
@@ -26,6 +26,9 @@ export class KeyboardComponent implements OnInit {
       }
     }
   }
+
+  @Input()
+  deactivated: string;
 
   @Output()
   keyEvent = new EventEmitter<string>();

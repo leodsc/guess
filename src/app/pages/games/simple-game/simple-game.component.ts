@@ -14,6 +14,7 @@ export class SimpleGameComponent implements OnInit {
   readonly tentatives = Array(6).fill(0).map(() => {
     return new Word(5);
   })
+  deactivatedKeys: string = "";
   currentTentative = 0;
   word: Word = this.tentatives[this.currentTentative];
   wordStack: string[] = [];
@@ -43,9 +44,25 @@ export class SimpleGameComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  private addInactiveKeys() {
+    for (const letter of this.word.value) {
+      //@ts-ignore
+      const letterExists = this.word.wordTokens[letter].status.some((value) => value !== "WRONG");
+      const isActive = !this.deactivatedKeys.includes(letter);
+      if (!letterExists && isActive) {
+        this.deactivatedKeys += letter;
+      }
+    }
+  }
+
   showKey(key: string) {
     // trim to prevent mouse/touch click add a space in the letter
-    this.word.add(this.block.current.x, key.trim());
+    key = key.trim();
+    if (this.deactivatedKeys.includes(key)) {
+      return;
+    }
+
+    this.word.add(this.block.current.x, key);
     if (this.block.current.x < 4) {
       this.block.current.x += 1;
     }
@@ -61,6 +78,7 @@ export class SimpleGameComponent implements OnInit {
       if (this.word.isRight()) {
         return;
       } else {
+        this.addInactiveKeys();
         this.wordStack.push(this.word.value.join(""));
         this.block.reset();
         this.currentTentative += 1;

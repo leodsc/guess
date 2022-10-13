@@ -12,12 +12,17 @@
 		gap: 0.25rem;
 
 		.line__key {
+			transition: all 1500ms;
 			color: var(--btn-bg-color);
 			font-weight: 500;
 			font-size: font("sizes", "medium")-4px;
 			border: 1px solid var(--btn-bg-color);
 			width: 30px;
 			border-radius: 5px;
+		}
+
+		.inactive {
+			opacity: 0.3;
 		}
 	}
 }

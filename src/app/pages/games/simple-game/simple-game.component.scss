@@ -45,8 +45,10 @@
 
 $animation-time: 500;
 
+$stats: ("right", "wrong", "semi", "missing");
+
 @for $i from 1 through 10 {
-	.letter-ctn:nth-child(#{$i}) {
+	.turn-around:nth-child(#{$i}) {
 		animation-delay: #{($animation-time*$i)-$animation-time}ms;
 	}
 }
@@ -56,15 +58,25 @@ $animation-time: 500;
 		"right": #5cb85c, 
 		"wrong": #d9534f, 
 		"semi": #f0ad4e,
+		"missing": #d9534f, 
 	);
 
 	@keyframes turn-block-#{$status} {
-		50% {
-			transform: scale(1.5);
-		}
-		100% {
-			transform: scale(1);
-			background-color: map-get($blocks-colors, $status);
+		@if ($status != "missing") {
+			50% {
+				transform: scale(1.5);
+			}
+			100% {
+				transform: scale(1);
+					background-color: map-get($blocks-colors, $status);
+			}
+		} @else {
+			50% {
+				border: 2px solid map-get($blocks-colors, $status);
+			}
+			100% {
+				border: 2px solid var(--btn-bg-color);
+			}
 		}
 	}
 }
@@ -90,6 +102,12 @@ $animation-time: 500;
 		@extend .turn-around;
 		@include animation-block("semi");
 		animation-name: turn-block-semi;
+	}
+
+	&__missing {
+		@extend .turn-around;
+		@include animation-block("missing");
+		animation-name: turn-block-missing;
 	}
 }
 

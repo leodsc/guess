@@ -7,19 +7,19 @@ import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/
 })
 export class KeyboardComponent implements OnInit {
 
-  @HostListener("document:keypress", ['$event'])
+  @HostListener("document:keydown", ['$event'])
   private handleKeyPress(event: KeyboardEvent) {
     // prevent that when clicking in a button, then pressing enter
     // will fire the last key event again
-    event.preventDefault();
     const key = event.key.toUpperCase();
-    const allowedSpecialKeys = ["ENTER", "BACKSPACE"];
+    const allowedSpecialKeys = ["ENTER", "BACKSPACE", "ARROWRIGHT", "ARROWLEFT"];
 
     const isAllowedSpecialKey = allowedSpecialKeys.includes(key);
-    const isAlphabetical = key.match(/[a-zA-Z]/g);
+    const isAlphabetical = key.match(/[a-zA-Z]/g) && key.length === 1;
 
     if (isAllowedSpecialKey || isAlphabetical) {
-      if (key === "ENTER" || key === "BACKSPACE") {
+      if (allowedSpecialKeys.includes(key)) {
+        event.preventDefault();
         this.sendSpecial(key);
       } else {
         this.sendKey(key);

@@ -1,4 +1,4 @@
-import { Component, Renderer2 } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import {ThemeService} from './services/theme.service';
 import {Theme} from './types/term';
 
@@ -30,4 +30,5 @@ export class AppComponent {
   private themeClassName(value: Theme) {
     return `${value.toLowerCase()}-theme`;
   }
+
 }

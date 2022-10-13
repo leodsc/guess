@@ -1,7 +1,7 @@
 import {Status} from "src/app/types/term";
 
 export class Word {
-  private _value: string[];
+  private readonly _value: string[];
   static readonly target: string = "TENSO";
   rightLetters: Status[] = [];
 
@@ -29,6 +29,10 @@ export class Word {
         this.rightLetters[index] = "WRONG";
       }
     }
+  }
+
+  isRight() {
+    return this.rightLetters.every((value) => value === "RIGHT");
   }
 
   private matches(letter: string) {

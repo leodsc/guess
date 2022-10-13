@@ -9,21 +9,33 @@ import {Word} from '../classes/word';
 
 export class SimpleGameComponent implements OnInit {
 
-  // bugs: cor vermelha mudando quando a tentativa é aumentada
   // bug: é possível fazer nova tentativa sem preencher todos os blocos
 
   readonly tentatives = Array(6).fill(0).map(() => {
     return new Word(5);
   })
   currentTentative = 0;
-
-  wordTarget = "TENSO";
+  word: Word = this.tentatives[this.currentTentative];
   wordStack: string[] = [];
   block = {
     current: {
       x: 0,
       y: 0,
     },
+    back: function() {
+      if (this.current.x > 0) {
+        this.current.x -= 1;
+      }
+    },
+    next: function () {
+      if (this.current.x < 4) {
+        this.current.x += 1;
+      }
+    },
+    reset: function() {
+      this.current.x = 0;
+      this.current.y += 1;
+    }
   }
 
   constructor() { }
@@ -32,9 +44,8 @@ export class SimpleGameComponent implements OnInit {
   }
 
   showKey(key: string) {
-    const word = this.tentatives[this.currentTentative];
     // trim to prevent mouse/touch click add a space in the letter
-    word.add(this.block.current.x, key.trim());
+    this.word.add(this.block.current.x, key.trim());
     if (this.block.current.x < 4) {
       this.block.current.x += 1;
     }
@@ -46,21 +57,19 @@ export class SimpleGameComponent implements OnInit {
 
   handleSpecialKey(key: string) {
     if (key === "ENTER") {
-      this.isRightWord();
-    }
-  }
-
-  private isRightWord() {
-    const word = this.tentatives[this.currentTentative];
-    word.compare();
-    const rightAnswer = word.value.join("") === this.wordTarget;
-    if (rightAnswer) {
-      return;
+      this.word.compare();
+      if (this.word.isRight()) {
+        return;
+      } else {
+        this.wordStack.push(this.word.value.join(""));
+        this.block.reset();
+        this.currentTentative += 1;
+        this.word = this.tentatives[this.currentTentative];
+      }
+    } else if (key === "BACKSPACE" || key === "ARROWLEFT") {
+      this.block.back();
     } else {
-      this.wordStack.push(word.value.join(""));
-      this.block.current.x = 0;
-      this.block.current.y += 1;
-      this.currentTentative += 1;
+      this.block.next();
     }
   }
 }

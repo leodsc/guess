@@ -2,7 +2,7 @@ import {Status} from "src/app/types/term";
 
 export class Word {
   private readonly _value: string[];
-  static readonly target: string = "TENSO";
+  static readonly target: string = "VERAO";
   rightLetters: Status[] = [];
 
   constructor(length: number) {
@@ -29,6 +29,14 @@ export class Word {
         this.rightLetters[index] = "WRONG";
       }
     }
+  }
+
+  isBlockEmpty(index: number) {
+    return this._value[index] === "";
+  }
+
+  erase(index: number) {
+    this._value[index] = "";
   }
 
   isRight() {

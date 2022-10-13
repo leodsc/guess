@@ -66,8 +66,13 @@ export class SimpleGameComponent implements OnInit {
         this.currentTentative += 1;
         this.word = this.tentatives[this.currentTentative];
       }
-    } else if (key === "BACKSPACE" || key === "ARROWLEFT") {
+    } else if (key === "ARROWLEFT") {
       this.block.back();
+    } else if (key === "BACKSPACE") {
+      if (this.word.isBlockEmpty(this.block.current.x)) {
+        this.block.back();        
+      }
+      this.word.erase(this.block.current.x);
     } else {
       this.block.next();
     }

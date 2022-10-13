@@ -2,8 +2,10 @@ import {Status} from "src/app/types/term";
 
 export class Word {
   private readonly _value: string[];
-  static readonly target: string = "VERAO";
+  static readonly target: string = "TENSO";
   rightLetters: Status[] = [];
+  targetTokens: {};
+  wordTokens: {};
 
   constructor(length: number) {
     // make api call
@@ -17,13 +19,31 @@ export class Word {
   add(index: number, letter: string) {
     this._value[index] = letter;
   }
+  
+  private tokenize(word: string[], count: boolean) {
+    return word.reduce((acc, current) => {
+      //@ts-ignore
+      const numberOfTimes = acc[current];
+      if (count && numberOfTimes !== undefined) {
+        return {...acc, [current]: numberOfTimes+1}
+      } else if (count && numberOfTimes === undefined) {
+        return {...acc, [current]: 1};
+      }
+      return {...acc, [current]: 0}
+    }, {})
+  }
 
   compare() {
     const targetArr = Word.target.split("");
-    for (const [index, target] of this._value.entries()) {
-      if (target === targetArr[index]) {
+    this.targetTokens = this.tokenize(targetArr, true);
+    this.wordTokens = this.tokenize(this._value, false);
+
+    for (const [index, letter] of this._value.entries()) {
+      //@ts-ignore
+      this.wordTokens[letter] += 1;
+      if (letter === targetArr[index]) {
         this.rightLetters[index] = "RIGHT";
-      } else if (this.matches(target)) {
+      } else if (this.isLetterOutOfOrder(letter)) {
         this.rightLetters[index] = "SEMI";
       } else {
         this.rightLetters[index] = "WRONG";
@@ -43,9 +63,16 @@ export class Word {
     return this.rightLetters.every((value) => value === "RIGHT");
   }
 
-  private matches(letter: string) {
-    const numberOfOccurencesWord = this._value.filter((value) => value === letter);
-    const numberOfOccurencesTarget = Word.target.split("").filter((value) => value === letter);
-    return numberOfOccurencesTarget.length === numberOfOccurencesWord.length;
+  private isLetterOutOfOrder(letter: string) {
+    //@ts-ignore
+    const letterDontExistOnTarget = this.targetTokens[letter] === undefined;
+    //@ts-ignore
+    const letterIsOutOfOrder = this.wordTokens[letter] <= this.targetTokens[letter];
+    if (letterDontExistOnTarget) {
+      return false;
+    } else if (letterIsOutOfOrder) {
+      return true;
+    }
+    return false;
   }
 }

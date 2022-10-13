@@ -73,6 +73,9 @@ export class SimpleGameComponent implements OnInit {
   }
 
   handleSpecialKey(key: string) {
+    if (this.word.isAnyLetterEmpty()) {
+      return;
+    }
     if (key === "ENTER") {
       this.word.compare();
       if (this.word.isRight()) {

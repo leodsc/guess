@@ -70,6 +70,15 @@ export class Word {
     return this.rightLetters.every((value) => value === "RIGHT");
   }
 
+  isAnyLetterEmpty() {
+    for (const letter of this._value) {
+      if (letter === "") {
+        return true;
+      }
+    }
+    return false;
+  }
+
   private isLetterOutOfOrder(letter: string) {
     //@ts-ignore
     const letterDontExistOnTarget = this.targetTokens[letter] === undefined;

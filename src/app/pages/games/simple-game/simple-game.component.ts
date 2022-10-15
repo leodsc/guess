@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {Word} from '../classes/word';
 
 @Component({
@@ -10,6 +10,9 @@ import {Word} from '../classes/word';
 export class SimpleGameComponent implements OnInit {
 
   // bug: é possível fazer nova tentativa sem preencher todos os blocos
+
+  @Input()
+  wordLength: number;
 
   readonly tentatives = Array(6).fill(0).map(() => {
     return new Word(5);
@@ -63,8 +66,30 @@ export class SimpleGameComponent implements OnInit {
     }
 
     this.word.add(this.block.current.x, key);
+    this.blockNextPosition(this.block.current.x, true);
+  }
+
+  private moveBlock() {
     if (this.block.current.x < 4) {
       this.block.current.x += 1;
+    } else {
+      this.block.current.x = 0;
+    }
+  }
+
+  private blockNextPosition(initialBlockPosition: number, recursionStart: boolean) {
+    const returnedToInitialBlock = initialBlockPosition === this.block.current.x && !recursionStart;
+    if (returnedToInitialBlock) {
+      this.moveBlock();
+      return;
+    }
+
+    this.moveBlock();
+    const nextLetter = this.word.value[this.block.current.x];
+    if (nextLetter === "") {
+      return;
+    } else {
+      this.blockNextPosition(initialBlockPosition, false);
     }
   }
 

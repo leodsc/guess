@@ -12,6 +12,7 @@ import { SimpleGameComponent } from './pages/games/simple-game/simple-game.compo
 import { KeyboardComponent } from './common/keyboard/keyboard.component';
 import { PopPipe } from './pipes/pop.pipe';
 import { LengthPipe } from './pipes/length.pipe';
+import { IsSpecialKeyPipe } from './pipes/is-special-key.pipe';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { LengthPipe } from './pipes/length.pipe';
     SimpleGameComponent,
     KeyboardComponent,
     PopPipe,
-    LengthPipe
+    LengthPipe,
+    IsSpecialKeyPipe
   ],
   imports: [
     BrowserModule,

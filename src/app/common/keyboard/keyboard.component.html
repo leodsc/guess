@@ -4,8 +4,22 @@
 			(click)="write($event)"
 			class="line__key"
 	 		[ngClass]="deactivated.includes(key | uppercase) ? 'inactive' : ''"
+	 		[name]="key | uppercase"
 			*ngFor="let key of lines">
-				{{key | uppercase}}
+			<p *ngIf="key !== 'BACKSPACE' && key !== 'ENTER'">
+				{{ key | uppercase }}
+			</p>
+			<fa-icon 
+				name='BACKSPACE' 
+				*ngIf="key === 'BACKSPACE'" 
+				[icon]="faEraser">
+			</fa-icon>
+			<fa-icon 
+				name='ENTER' 
+				*ngIf="key === 'ENTER'" 
+		 		[styles]="{'transform': 'rotate(90deg)', 'padding': '0 1rem'}"
+				[icon]="faTurnDown">
+			</fa-icon>
 		</button>
 	</div>
 </section>

@@ -18,7 +18,9 @@
 	$ctn-height: 60px;
 	opacity: 0.75;
 	margin-top: 1rem;
-	width: 60px;
+	width: 15vw;
+	max-width: 60px;
+	min-width: 38px;
 	height: $ctn-height;
 	border: 2px solid var(--btn-bg-color);
 	border-radius: 5px;

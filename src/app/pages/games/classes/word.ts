@@ -2,7 +2,7 @@ import {Status} from "src/app/types/term";
 
 export class Word {
   private readonly _value: string[];
-  static readonly target: string = "TENSO";
+  static readonly target: string = "SOLAR";
   rightLetters: Status[] = [];
   targetTokens: {};
   wordTokens: {};

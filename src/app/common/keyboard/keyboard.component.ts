@@ -1,4 +1,5 @@
 import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+import { faTurnDown, faEraser } from "@fortawesome/free-solid-svg-icons"
 
 @Component({
   selector: 'app-keyboard',
@@ -6,6 +7,9 @@ import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@a
   styleUrls: ['./keyboard.component.scss']
 })
 export class KeyboardComponent implements OnInit {
+
+  faEraser = faEraser;
+  faTurnDown = faTurnDown;
 
   @HostListener("document:keydown", ['$event'])
   private handleKeyPress(event: KeyboardEvent) {
@@ -36,10 +40,11 @@ export class KeyboardComponent implements OnInit {
   @Output()
   specialKey = new EventEmitter<string>();
 
+  public specialKeysValues = [ "BACKSPACE", "ENTER" ];
   public keys = [
     ["q","w","e","r","t","y","u","i","o","p"],
-    ["a","s","d","f","g","h","j","k","l", "ç"],
-    ["z","x","c","v","b","n","m"],
+    ["a","s","d","f","g","h","j","k","l", "ç", "BACKSPACE"],
+    ["z","x","c","v","b","n","m", "ENTER"],
   ]
 
   constructor() { }
@@ -48,12 +53,13 @@ export class KeyboardComponent implements OnInit {
   }
 
   write($event: MouseEvent | TouchEvent) {
-    const element = $event.target as HTMLElement;
-    this.sendKey(element.textContent);
+    const element = $event.currentTarget as HTMLElement;
+    this.specialKeysValues.includes(element.name) ?
+      this.sendSpecial(element.name) :
+      this.sendKey(element.name);
   }
 
   sendKey(key: string | null) {
-    console.log('key');
     if (key === null) {
       throw new Error("null key");
     } else {
@@ -62,7 +68,6 @@ export class KeyboardComponent implements OnInit {
   }
 
   sendSpecial(key: string) {
-    console.log("special");
     this.specialKey.emit(key);
   }
 }

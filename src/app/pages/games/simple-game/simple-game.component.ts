@@ -73,10 +73,11 @@ export class SimpleGameComponent implements OnInit {
   }
 
   handleSpecialKey(key: string) {
-    if (this.word.isAnyLetterEmpty()) {
-      return;
-    }
     if (key === "ENTER") {
+      if (this.word.isAnyLetterEmpty()) {
+        return;
+      }
+
       this.word.compare();
       if (this.word.isRight()) {
         return;
@@ -90,6 +91,7 @@ export class SimpleGameComponent implements OnInit {
     } else if (key === "ARROWLEFT") {
       this.block.back();
     } else if (key === "BACKSPACE") {
+      console.log("oi");
       if (this.word.isBlockEmpty(this.block.current.x)) {
         this.block.back();        
       }

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { faTurnDown, faEraser } from "@fortawesome/free-solid-svg-icons"
+import {KeyboardService} from 'src/app/services/keyboard.service';
 
 @Component({
   selector: 'app-keyboard',
@@ -15,31 +16,19 @@ export class KeyboardComponent implements OnInit {
   private handleKeyPress(event: KeyboardEvent) {
     // prevent that when clicking in a button, then pressing enter
     // will fire the last key event again
+    event.preventDefault();
     const key = event.key.toUpperCase();
-    const allowedSpecialKeys = ["ENTER", "BACKSPACE", "ARROWRIGHT", "ARROWLEFT"];
 
-    const isAllowedSpecialKey = allowedSpecialKeys.includes(key);
-    const isAlphabetical = key.match(/[a-zA-Z]/g) && key.length === 1;
-
-    if (isAllowedSpecialKey || isAlphabetical) {
-      if (allowedSpecialKeys.includes(key)) {
-        event.preventDefault();
-        this.sendSpecial(key);
-      } else {
-        this.sendKey(key);
-      }
+    const keyType = this.isSpecialOrNormalKey(key);
+    if (keyType !== false) {
+      this.keyboardService.send({
+        value: key,
+        type: keyType
+      });
     }
   }
 
-  @Input()
-  deactivated: string;
-
-  @Output()
-  keyEvent = new EventEmitter<string>();
-
-  @Output()
-  specialKey = new EventEmitter<string>();
-
+  inactiveKeys: string[] = [];
   public specialKeysValues = [ "BACKSPACE", "ENTER" ];
   public keys = [
     ["q","w","e","r","t","y","u","i","o","p"],
@@ -47,27 +36,41 @@ export class KeyboardComponent implements OnInit {
     ["z","x","c","v","b","n","m", "ENTER"],
   ]
 
-  constructor() { }
+  constructor(private keyboardService: KeyboardService) { }
 
   ngOnInit(): void {
+    this.keyboardService.inactiveKeysObservable.subscribe(keys => {
+      this.inactiveKeys = [];
+      console.log(keys);
+      for (const key of keys) {
+        this.inactiveKeys.push(key.value);
+      }
+      console.log(this.inactiveKeys);
+    })
+  }
+
+  private isSpecialOrNormalKey(key: string): "SPECIAL" | "NORMAL" | false {
+    const isAllowedSpecialKey = [
+      "ENTER", "BACKSPACE", "ARROWRIGHT", "ARROWLEFT"
+    ].includes(key);
+    const isAlphabetical = key.match(/[a-zA-Z]/g) && key.length === 1;
+
+    if (isAllowedSpecialKey) {
+      return "SPECIAL";
+    } else if (isAlphabetical) {
+      return "NORMAL";
+    }
+    return false;
   }
 
   write($event: MouseEvent | TouchEvent) {
     const element = $event.currentTarget as HTMLElement;
-    this.specialKeysValues.includes(element.name) ?
-      this.sendSpecial(element.name) :
-      this.sendKey(element.name);
-  }
-
-  sendKey(key: string | null) {
-    if (key === null) {
-      throw new Error("null key");
-    } else {
-      this.keyEvent.emit(key);
+    const keyType = this.isSpecialOrNormalKey(element.name);
+    if (keyType !== false) {
+      this.keyboardService.send({
+        value: element.name,
+        type: keyType
+      });
     }
-  }
-
-  sendSpecial(key: string) {
-    this.specialKey.emit(key);
   }
 }

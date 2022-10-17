@@ -3,7 +3,7 @@
 		<button 
 			(click)="write($event)"
 			class="line__key"
-	 		[ngClass]="deactivated.includes(key | uppercase) ? 'inactive' : ''"
+	 		[class.inactive]="inactiveKeys.includes(key | uppercase)"
 	 		[name]="key | uppercase"
 			*ngFor="let key of lines">
 			<p *ngIf="key !== 'BACKSPACE' && key !== 'ENTER'">

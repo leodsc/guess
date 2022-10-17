@@ -1,0 +1,75 @@
+describe("Simple Game Tests", () => {
+  beforeEach(() => {
+    cy.visit('http://localhost:8080/games/simple');
+  });
+
+  it("Should Write Invalid Word", () => {
+    cy.write("TEXTO{enter}");
+    cy.get(".turn-around__wrong").should("have.length", 4);
+    cy.get(".turn-around__semi").should("have.length", 1);
+
+    cy.get(".line__key.inactive").should("have.length", 3);
+    cy.get(".keyboard").contains("T").should("have.class", "inactive");
+    cy.get(".keyboard").contains("E").should("have.class", "inactive");
+    cy.get(".keyboard").contains("X").should("have.class", "inactive");
+  })
+
+  it("Should skip to next empty block using arrows", () => {
+      cy.write("B{rightArrow}L{leftArrow}{leftArrow}O");
+      const firstTentative = cy.get(".tentative").first()
+      const fourthBlock = firstTentative.get(".letter-ctn").eq(3)
+      fourthBlock.get(".current-block").should("exist");
+  })
+
+  it("Should skip to next empty block using touch/mouse", () => {
+      cy.write("B");
+      const firstTentative = cy.get(".tentative").first()
+      let allBlocks = firstTentative.get(".letter-ctn");
+      allBlocks.eq(2).click();
+      cy.write("L");
+      allBlocks = firstTentative.get(".letter-ctn");
+      allBlocks.eq(1).click();
+      cy.write("O");
+      const fourthBlock = firstTentative.get(".letter-ctn").eq(3)
+      fourthBlock.get(".current-block").should("exist");
+  })
+
+  it("Should erase word", () => {
+    cy.write("TEXTO");
+    for (let i = 0; i < 5; i++) {
+      cy.write("{backspace}");
+    }
+    for (let i = 0; i < 5; i++) {
+      const allBlocks = cy.get(".tentative").first().children();
+      allBlocks.eq(i).then(elem => expect(elem.text().trim()).to.eq(""));
+    }
+  })
+
+  it("Should replace every letter", () => {
+    cy.write("TEXTO");
+    const newText = "NOVOS";
+    for (let i = 0; i < 5; i++) {
+      let allBlocks = cy.get(".tentative").first().children();
+      allBlocks.eq(i).click();
+      cy.write(newText[i]);
+      allBlocks = cy.get(".tentative").first().children();
+      allBlocks.eq(i).then(elem => expect(elem.text().trim()).to.eq(newText[i]));
+    }
+  })
+
+  it("Should win after 1 guess", () => {
+    cy.write("SOLAR{enter}");
+    for (let i = 0; i < 5; i++) {
+      const allBlocks = cy.get(".tentative").first().children();
+      allBlocks.eq(i).should("have.class", "turn-around__right");
+    }
+  })
+
+  it("Should not show invalid characters", () => {
+    cy.write("{shift}{esc}{del}{leftArrow}{rightArrow}{downArrow}{upArrow}");
+    for (let i = 0; i < 5; i++) {
+      const allBlocks = cy.get(".tentative").first().children();
+      allBlocks.eq(i).then(elem => expect(elem.text().trim()).to.eq(""));
+    }
+  })
+})

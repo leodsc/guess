@@ -1,27 +1,4 @@
 <main class="page">
-	<div class="board">
-		<div class="tentative" *ngFor="let word of tentatives; let t = index">
-			<div 
-		 		class="letter-ctn" 
-		 		 [ngClass]="'turn-around__' + word.rightLetters[i] | lowercase"
-		 		*ngFor="let letter of word.value; let i = index" 
-				(click)="changeCurrentLetterBox(i)">
-				<p *ngIf="currentTentative == t" class="letter">
-					{{word.value[i]}}
-				</p>
-				<p class="letter" *ngIf="currentTentative !== t && wordStack[t] !== undefined">
-					{{ wordStack[t] | pop:i}}
-				</p>
-				<div 
-					*ngIf="block.current.x == i && block.current.y == t" 
-					class="current-block">
-				</div>
-			</div>
-		</div>
-	</div>	
-	<app-keyboard 
-	 		[deactivated]="deactivatedKeys"
-			(keyEvent)="showKey($event)"
-			(specialKey)="handleSpecialKey($event)">
-	</app-keyboard>
+	<app-board></app-board>
+	<app-keyboard></app-keyboard>
 </main>

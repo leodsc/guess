@@ -13,6 +13,7 @@ import { KeyboardComponent } from './common/keyboard/keyboard.component';
 import { PopPipe } from './pipes/pop.pipe';
 import { LengthPipe } from './pipes/length.pipe';
 import { IsSpecialKeyPipe } from './pipes/is-special-key.pipe';
+import { BoardComponent } from './common/board/board.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { IsSpecialKeyPipe } from './pipes/is-special-key.pipe';
     KeyboardComponent,
     PopPipe,
     LengthPipe,
-    IsSpecialKeyPipe
+    IsSpecialKeyPipe,
+    BoardComponent
   ],
   imports: [
     BrowserModule,
